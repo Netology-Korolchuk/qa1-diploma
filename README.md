@@ -11,7 +11,9 @@
 ---------------------
 
 ## Запуск SUT
-1. Запускаем docker terminal и выполняем команду: docker pull mysql
+1. Устанавливаем mysql - docker pull mysql
+1. Устанавливаем node - docker pull node
+
 1. Переходим в папку проекта и выполняем команду: docker-compose up
 1. Для запуска приложение выполняем команду java -jar aqa-shop.jar или run.bat
 приложение доступно по адресу: http://localhost:8080/
