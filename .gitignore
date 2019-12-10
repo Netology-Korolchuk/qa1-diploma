@@ -41,7 +41,7 @@ out/
 
 ### Exclusions ###
 !gradle/wrapper/gradle-wrapper.jar
-!ms/app-shop.jar
-!ps/app-shop.jar
+!ms/aqa-shop.jar
+!ps/aqa-shop.jar
 !**/src/main/**
 !**/src/test/**
