@@ -14,7 +14,7 @@
 2. Запускаем симулятора банковских сервисов:
     - выполняем команду run_srv.bat,  
 
-[!NOTE] должен быть установлен Node.js, https://nodejs.org/en/
+> должен быть установлен Node.js, https://nodejs.org/en/
 
 [!NOTE] Cимулятор доступен по адресу http://localhost:9999/
 
