@@ -1,6 +1,8 @@
  qa1-diploma
 # Дипломный проект профессии «Тестировщик»
 
+[![Build status](https://ci.appveyor.com/api/projects/status/x6qt524ls5d9gyam?svg=true)](https://ci.appveyor.com/project/Netology-Korolchuk/qa1-diploma)
+
 План автоматизации [Здесь](Plan.md)
 ---------------------
 ## Инструкция по запуску
