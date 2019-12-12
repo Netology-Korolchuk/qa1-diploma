@@ -1,30 +1,34 @@
-# qa1-diploma
-Дипломный проект профессии «Тестировщик»
-Задача разложена на 4 этапа:
+ qa1-diploma
+# Дипломный проект профессии «Тестировщик»
 
 План автоматизации [Здесь](Plan.md)
 ---------------------
+## Инструкция по запуску
 
-## Запуск SUT
+1. Склонировать репозиторий  
+    <code>git clone https://github.com/Netology-Korolchuk/qa1-diploma.git</code>
 
-1. Устанавливаем БД: 
-    - mysql - docker pull mysql
-    - postgres - docker pull postgres
+2. Запустить контейнеры docker:     
+    > Для запуска связки node + MySql файл ms_docker-compose.yml переименовать в docker-compose.yml     
+    Для запуска связки node + Postgres файл ps_docker-compose.yml переименовать в docker-compose.yml   
+ 
+    Выполнить команду:  
+    <code>docker-compose up -d</code>
+ 
+3. В каталоге /artifacts запустить приложение:  
+    > Для запуска приложения с базой MySql файл ms_application.properties переименовать в application.properties  
+    Для запуска приложения с базой Postgres файл ps_application.properties переименовать в application.properties   
+   
+    Выполнить команду:  
+    <code>java -jar aqa-shop.jar</code>
 
-2. Запускаем симулятора банковских сервисов:
-    - выполняем команду run_srv.bat,  
+4. В каталоге /gate-simulator запустить симулятор платежного шлюза  
+   <code>npm start</code>
 
->[!NOTE] должен быть установлен Node.js, https://nodejs.org/en/
+5. Запустить тесты  
+   <code>gradlew test<code>
 
->[!NOTE] Cимулятор доступен по адресу http://localhost:9999/
 
-3. Запускаем приложения из командной строки:  
-    - с базой  MySQL выполняем команду run-ms.bat
-    - с базой  Postgres выполняем команду run-ps.bat
-
->[!NOTE] после остановки приложения, при выдаче сообщения: 'Завершение выполнения пакетного файла', нажать 'N'*
-
->[!NOTE] Приложение доступно по адресу: http://localhost:8080/
 
 
 

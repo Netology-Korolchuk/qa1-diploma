@@ -3,6 +3,7 @@ Thumbs.db*
 HELP.md
 .gradle
 build/
+!/
 
 ### STS ###
 .apt_generated
@@ -41,7 +42,6 @@ out/
 
 ### Exclusions ###
 !gradle/wrapper/gradle-wrapper.jar
-!ms/aqa-shop.jar
-!ps/aqa-shop.jar
+!artifacts/aqa-shop.jar
 !**/src/main/**
 !**/src/test/**
