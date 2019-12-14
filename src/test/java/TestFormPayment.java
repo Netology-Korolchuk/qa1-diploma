@@ -295,43 +295,138 @@ public class TestFormPayment {
         $$(".input__sub").find(exactText("Неверный формат")).shouldBe(visible);
     }
 
-//тесты записи В БД - СДЕЛАТЬ REST API тесты
+//REST API тесты и тесты записи в БД
 
     @Test
-    @DisplayName("Оплата по активной карте, обычная покупка, валидные данные - тест записи в БД")
-    void shouldPayByApprovedCardSaveDb() throws SQLException {
-        dataHelper.buyingForYourMoney();
-        dataHelper.activeCardData();
-        dataHelper.pushСontinueButton();
+    @DisplayName("API Оплата по активной карте, обычная покупка, валидные данные, проверка записи в БД")
+    void shouldPayByApprovedCardApi() throws SQLException{
+        String request = "{\n" +
+                "           \"number\":\"4444 4444 4444 4441\",\n" +
+                "           \"year\":\"22\",\n" +
+                "           \"month\":\"08\",\n" +
+                "           \"holder\":\"Petrov Ivan\",\n" +
+                "           \"cvc\":\"999\"}";
+        given().
+                header("Content-Type", "application/json").
+                body(request).
+                when().
+                post("http://localhost:8080/api/v1/pay").
+                then().
+                statusCode(200).
+                body("status", equalTo("APPROVED"));
+
         dataHelper.paymentStatus(Status.APPROVED);
     }
 
     @Test
-    @DisplayName("Оплата по активной карте, покупка в кредит, валидные данные - тест записи в БД")
-    void shouldPayByApprovedCardInCreditSaveDb() throws SQLException {
-        dataHelper.buyingOnCredit();
-        dataHelper.activeCardData();
-        dataHelper.pushСontinueButton();
+    @DisplayName("API Оплата по неактивной карте, обычная покупка, валидные данные, проверка записи в БД")
+    void shouldNoPayByDeclinedCardApi() throws SQLException{
+        String request = "{\n" +
+                "           \"number\":\"4444 4444 4444 4442\",\n" +
+                "           \"year\":\"22\",\n" +
+                "           \"month\":\"08\",\n" +
+                "           \"holder\":\"Petrov Ivan\",\n" +
+                "           \"cvc\":\"999\"}";
+        given().
+                header("Content-Type", "application/json").
+                body(request).
+                when().
+                post("http://localhost:8080/api/v1/pay").
+                then().
+                statusCode(200).
+                body("status", equalTo("DECLINED"));
+
+        dataHelper.paymentStatus(Status.DECLINED);
+    }
+
+    @Test
+    @DisplayName("API Оплата по неизвестной карте, обычная покупка, валидные данные, проверка записи в БД")
+    void shouldNoPayByUnknownCardApi() throws SQLException{
+
+        String request = "{\n" +
+                "           \"number\":\"4444 4444 4444 4443\",\n" +
+                "           \"year\":\"22\",\n" +
+                "           \"month\":\"08\",\n" +
+                "           \"holder\":\"Petrov Ivan\",\n" +
+                "           \"cvc\":\"999\"}";
+
+        given().
+                header("Content-Type", "application/json").
+                body(request).
+                when().
+                post("http://localhost:8080/api/v1/pay").
+                then().
+                statusCode(500).
+                body("message", equalTo("400 Bad Request"));
+
+        dataHelper.paymentStatus(Status.DECLINED);
+    }
+
+    @Test
+    @DisplayName("API Оплата по активной карте, покупка в кредит, валидные данные, проверка записи в БД")
+    void shouldPayByApprovedCardInCreditApi() throws SQLException{
+        String request = "{\n" +
+                "           \"number\":\"4444 4444 4444 4441\",\n" +
+                "           \"year\":\"22\",\n" +
+                "           \"month\":\"08\",\n" +
+                "           \"holder\":\"Petrov Ivan\",\n" +
+                "           \"cvc\":\"999\"}";
+        given().
+                header("Content-Type", "application/json").
+                body(request).
+                when().
+                post("http://localhost:8080/api/v1/credit").
+                then().
+                statusCode(200).
+                body("status", equalTo("APPROVED"));
+
         dataHelper.creditStatus(Status.APPROVED);
     }
 
     @Test
-    @DisplayName("Оплата по неизвестной карте, обычная покупка, валидные данные - тест записи в БД")
-    void shouldNoPayByUnknownCardSaveDb() throws SQLException {
-        dataHelper.buyingForYourMoney();
-        dataHelper.unknownCardData();
-        dataHelper.pushСontinueButton();
-        dataHelper.paymentStatus(Status.DECLINED);
+    @DisplayName("API Оплата по неактивной карте, покупка в кредит, валидные данные, проверка записи в БД")
+    void shouldNoPayByDeclinedCardInCreditApi() throws SQLException{
+        String request = "{\n" +
+                "           \"number\":\"4444 4444 4444 4442\",\n" +
+                "           \"year\":\"22\",\n" +
+                "           \"month\":\"08\",\n" +
+                "           \"holder\":\"Petrov Ivan\",\n" +
+                "           \"cvc\":\"999\"}";
+        given().
+                header("Content-Type", "application/json").
+                body(request).
+                when().
+                post("http://localhost:8080/api/v1/credit").
+                then().
+                statusCode(200).
+                body("status", equalTo("DECLINED"));
+
+        dataHelper.creditStatus(Status.DECLINED);
     }
 
     @Test
-    @DisplayName("Оплата по неизвестной карте, покупка в кредит, валидные данные - тест записи в БД")
-    void shouldNoPayByUnknownCardInCreditSaveDb() throws SQLException {
-        dataHelper.buyingOnCredit();
-        dataHelper.unknownCardData();
-        dataHelper.pushСontinueButton();
-        dataHelper.paymentStatus(Status.DECLINED);
+    @DisplayName("API Оплата по неизвестной карте, покупка в кредит, валидные данные, проверка записи в БД")
+    void shouldNoPayByUnknownCardInCreditApi() throws SQLException{
+
+        String request = "{\n" +
+                "           \"number\":\"4444 4444 4444 4443\",\n" +
+                "           \"year\":\"22\",\n" +
+                "           \"month\":\"08\",\n" +
+                "           \"holder\":\"Petrov Ivan\",\n" +
+                "           \"cvc\":\"999\"}";
+
+        given().
+                header("Content-Type", "application/json").
+                body(request).
+                when().
+                post("http://localhost:8080/api/v1/credit").
+                then().
+                statusCode(500).
+                body("message", equalTo("400 Bad Request"));
+
+        dataHelper.creditStatus(Status.DECLINED);
     }
+
 }
 
 
