@@ -3,7 +3,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/x6qt524ls5d9gyam?svg=true)](https://ci.appveyor.com/project/Netology-Korolchuk/qa1-diploma)
 
-План автоматизации [Здесь](Plan.md)
+[План автоматизации](docs/Plan.md)
 ---------------------
 ## Инструкция по запуску
 
@@ -28,9 +28,11 @@
    <code>npm start</code>
 
 5. Запустить тесты  
-   <code>gradlew test<code>
+   <code>gradlew test</code>
 
-
+6. Сформировать и открыть отчеты  
+   <code>gradlew allureReport</code>  
+   <code>gradlew allureServe</code>
 
 
 

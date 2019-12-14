@@ -1,21 +1,34 @@
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-
 import java.sql.SQLException;
-
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-
 import org.junit.jupiter.api.*;
+
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.*;
+import io.qameta.allure.selenide.AllureSelenide;
+
 
 public class TestFormPayment {
 
     DataHelper dataHelper = new DataHelper();
+
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
 
     @Test
     @DisplayName("Оплата по активной карте, обычная покупка, валидные данные")
