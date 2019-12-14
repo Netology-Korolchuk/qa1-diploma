@@ -61,4 +61,6 @@ public class DataHelper {
         $$(".button__content").find(exactText("Продолжить")).click();
     }
 
+
+
 }
