@@ -61,6 +61,21 @@ public class DataHelper {
         $$(".button__content").find(exactText("Продолжить")).click();
     }
 
+    public void paymentStatus(Status status) throws SQLException {
+        val runner = new QueryRunner();
+        val conn = DriverManager.getConnection("jdbc:mysql://192.168.99.100:3306/app", "app", "pass");
+        val paymentDataSQL = "SELECT * FROM payment_entity WHERE created >= (now() - interval 5 minute) ORDER BY created DESC;";
+        val payment = runner.query(conn, paymentDataSQL, new BeanHandler<>(Payment.class));
+        assertEquals(status, payment.status);
+    }
+
+    public void creditStatus(Status status) throws SQLException {
+        val runner = new QueryRunner();
+        val conn = DriverManager.getConnection("jdbc:mysql://192.168.99.100:3306/app", "app", "pass");
+        val creditDataSQL = "SELECT * FROM credit_request_entity WHERE created >= (now() - interval 5 minute) ORDER BY created DESC;";
+        val payment = runner.query(conn, creditDataSQL, new BeanHandler<>(Payment.class));
+        assertEquals(status, payment.status);
+    }
 
 
 }

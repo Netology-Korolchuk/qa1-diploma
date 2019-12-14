@@ -319,29 +319,8 @@ public class TestFormPayment {
         dataHelper.pushСontinueButton();
         dataHelper.paymentStatus(Status.DECLINED);
     }
-
- /*
-    @Test
-    @DisplayName("Rest API")
-    void shouldRest() {
-        String request = "{\n" +
-                "           \"number\":\"4444 4444 4444 4443\",\n" +
-                "           \"year\":\"22\",\n" +
-                "           \"month\":\"08\",\n" +
-                "           \"holder\":\"Petrov Ivan\",\n" +
-                "           \"cvc\":\"999\"}";
-
-            given().
-            header("Content-Type", "application/json").
-            body(request).
-            when().
-            post("http://localhost:8080/api/v1/credit").
-            then().
-            statusCode(500).
-            body("message", equalTo("400 Bad Request"));
-    }
-*/
-
-
 }
+
+
+
 
