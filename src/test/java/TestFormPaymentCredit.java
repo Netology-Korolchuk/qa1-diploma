@@ -14,7 +14,7 @@ import io.qameta.allure.*;
 import io.qameta.allure.selenide.AllureSelenide;
 
 
-public class TestFormPayment {
+public class TestFormPaymentCredit {
 
     DataHelper dataHelper = new DataHelper();
 
@@ -29,49 +29,48 @@ public class TestFormPayment {
         SelenideLogger.removeListener("allure");
     }
 
-
     @Test
-    @DisplayName("Оплата по активной карте, обычная покупка, валидные данные")
-    void shouldPayByApprovedCard() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по активной карте, покупка в кредит, валидные данные")
+    void shouldPayByApprovedCardInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.pushСontinueButton();
         $$(".notification__title").find(exactText("Успешно")).waitUntil(visible, 15000);
     }
 
     @Test
-    @DisplayName("Оплата по неактивной карте, обычная покупка, валидные данные")
-    void shouldNoPayByDeclinedCard() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по неактивной карте, покупка в кредит, валидные данные")
+    void shouldNoPayByDeclinedCardInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.inactiveCardData();
         dataHelper.pushСontinueButton();
         $$(".notification__title").find(exactText("Ошибка")).waitUntil(visible, 15000);
     }
 
     @Test
-    @DisplayName("Оплата по неизвестной карте, обычная покупка, валидные данные")
-    void shouldNoPayByUnknownCard() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по неизвестной карте, покупка в кредит, валидные данные")
+    void shouldNoPayByUnknownCardInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.unknownCardData();
         dataHelper.pushСontinueButton();
         $$(".notification__title").find(exactText("Ошибка")).waitUntil(visible, 15000);
     }
 
     @Test
-    @DisplayName("Оплата по карте c невалидным номером карты, обычная покупка")
-    void shouldNoPayInvalidCardNumberField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c невалидным номером карты, покупка в кредит")
+    void shouldNoPayInvalidCardNumberFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.cardNumber.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
-        dataHelper.cardNumber.setValue("333 333 333");
+        dataHelper.cardNumber.setValue("333 333 333 bbbb");
         dataHelper.pushСontinueButton();
         $$(".input__sub").find(exactText("Неверный формат")).shouldBe(visible);
     }
 
     @Test
-    @DisplayName("Оплата по карте c невалидным номером месяца, обычная покупка")
-    void shouldNoPayInvalidMonthField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c невалидным номером месяца, покупка в кредит")
+    void shouldNoPayInvalidMonthFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.month.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.month.setValue("13");
@@ -80,9 +79,9 @@ public class TestFormPayment {
     }
 
     @Test
-    @DisplayName("Оплата по карте c невалидным номером года, обычная покупка")
-    void shouldNoPayInvalidYearField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c невалидным номером года, покупка в кредит")
+    void shouldNoPayInvalidYearFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.year.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.year.setValue("18");
@@ -91,9 +90,9 @@ public class TestFormPayment {
     }
 
     @Test
-    @DisplayName("Оплата по карте c невалидным полем владелец, обычная покупка")
-    void shouldNoPayInvalidCardOwnerField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c невалидным полем владелец, покупка в кредит")
+    void shouldNoPayInvalidCardOwnerFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.cardOwner.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.cardOwner.setValue("Фыва с oldgem 123456");
@@ -102,9 +101,9 @@ public class TestFormPayment {
     }
 
     @Test
-    @DisplayName("Оплата по карте c невалидным полем CVV, обычная покупка")
-    void shouldNoPayInvalidCVVField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c невалидным полем CVV, покупка в кредит")
+    void shouldNoPayInvalidCVVFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.cvcOrCvvNumber.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.cvcOrCvvNumber.setValue("123aa");
@@ -113,9 +112,9 @@ public class TestFormPayment {
     }
 
     @Test
-    @DisplayName("Оплата по карте c пустым номером карты, обычная покупка")
-    void shouldNoPayEmptyCardNumberField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c пустым номером карты, покупка в кредит")
+    void shouldNoPayEmptyCardNumberFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.cardNumber.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.pushСontinueButton();
@@ -123,9 +122,9 @@ public class TestFormPayment {
     }
 
     @Test
-    @DisplayName("Оплата по карте c пустым номером месяца, обычная покупка")
-    void shouldNoPayEmptyMonthField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c пустым номером месяца, покупка в кредит")
+    void shouldNoPayEmptyMonthFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.month.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.pushСontinueButton();
@@ -133,9 +132,9 @@ public class TestFormPayment {
     }
 
     @Test
-    @DisplayName("Оплата по карте c пустым номером года, обычная покупка")
-    void shouldNoPayEmptyYearField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c пустым номером года, покупка в кредит")
+    void shouldNoPayEmptyYearFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.year.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.pushСontinueButton();
@@ -143,9 +142,9 @@ public class TestFormPayment {
     }
 
     @Test
-    @DisplayName("Оплата по карте c пустым полем владелец, обычная покупка")
-    void shouldNoPayEmptyCardOwnerField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c пустым полем владелец, покупка в кредит")
+    void shouldNoPayEmptyCardOwnerFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.cardOwner.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.pushСontinueButton();
@@ -153,9 +152,9 @@ public class TestFormPayment {
     }
 
     @Test
-    @DisplayName("Оплата по карте c пустым полем CVV, обычная покупка")
-    void shouldNoPayEmptyCVVField() throws SQLException {
-        dataHelper.buyingForYourMoney();
+    @DisplayName("Оплата по карте c пустым полем CVV, покупка в кредит")
+    void shouldNoPayEmptyCVVFieldInCredit() throws SQLException {
+        dataHelper.buyingOnCredit();
         dataHelper.activeCardData();
         dataHelper.cvcOrCvvNumber.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
         dataHelper.pushСontinueButton();

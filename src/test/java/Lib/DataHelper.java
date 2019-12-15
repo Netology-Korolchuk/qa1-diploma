@@ -7,6 +7,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
@@ -14,12 +18,35 @@ import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DataHelper {
+
+
+    private static String url = System.getProperty("db.url");
+    private static String userDB;
+    private static String password;
+
+
+    static {
+        Properties property = new Properties();
+        try (FileInputStream file = new FileInputStream("application.properties")) {
+            property.load(file);
+            userDB = property.getProperty("spring.datasource.username");
+            password = property.getProperty("spring.datasource.password");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     List<SelenideElement> input = $$(".input__control");
     SelenideElement cardNumber = input.get(0);
     SelenideElement month = input.get(1);
     SelenideElement year = input.get(2);
     SelenideElement cardOwner = input.get(3);
     SelenideElement cvcOrCvvNumber = input.get(4);
+
+
+
+
 
     public void buyingForYourMoney(){
         open("http://localhost:8080");
@@ -63,7 +90,7 @@ public class DataHelper {
 
     public void paymentStatus(Status status) throws SQLException {
         val runner = new QueryRunner();
-        val conn = DriverManager.getConnection("jdbc:mysql://192.168.99.100:3306/app", "app", "pass");
+        val conn = DriverManager.getConnection(url, userDB, password);
         val paymentDataSQL = "SELECT * FROM payment_entity WHERE created >= (now() - interval 5 minute) ORDER BY created DESC;";
         val payment = runner.query(conn, paymentDataSQL, new BeanHandler<>(Payment.class));
         assertEquals(status, payment.status);
@@ -71,7 +98,7 @@ public class DataHelper {
 
     public void creditStatus(Status status) throws SQLException {
         val runner = new QueryRunner();
-        val conn = DriverManager.getConnection("jdbc:mysql://192.168.99.100:3306/app", "app", "pass");
+        val conn = DriverManager.getConnection(url, userDB, password);
         val creditDataSQL = "SELECT * FROM credit_request_entity WHERE created >= (now() - interval 5 minute) ORDER BY created DESC;";
         val payment = runner.query(conn, creditDataSQL, new BeanHandler<>(Payment.class));
         assertEquals(status, payment.status);
