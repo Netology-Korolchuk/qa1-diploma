@@ -1,7 +1,5 @@
 # Дипломный проект профессии «Тестировщик»
 
-[![Build status](https://ci.appveyor.com/api/projects/status/x6qt524ls5d9gyam?svg=true)](https://ci.appveyor.com/project/Netology-Korolchuk/qa1-diploma)
-
 [План автоматизации](docs/Plan.md)
 
 [Отчет по итогам тестирования](docs/Report.md)
@@ -14,28 +12,38 @@
 1. Склонировать репозиторий  
     <code>git clone https://github.com/Netology-Korolchuk/qa1-diploma.git</code>
 
-2. Запустить контейнеры docker:     
-    > По умолчанию настроена связка node + MySql  
-    Для запуска связки node + Postgres файл ps_docker-compose.yml переименовать в docker-compose.yml   
- 
-    Выполнить команду:  
-    <code>docker-compose up -d</code>
- 
-3. В каталоге /artifacts запустить приложение:  
-    > По умолчанию приложение настроено для работы с базой MySql    
-    Для запуска приложения с базой Postgres файл ps_application.properties переименовать в application.properties   
-   
-    Выполнить команду:  
-    <code>java -jar aqa-shop.jar</code>
+2. Запустить контейнеры docker:  
 
-4. В каталоге /gate-simulator запустить симулятор платежного шлюза  
-   <code>npm start</code>
+    Для запуска связки node + mysql выполнить команду:  
+    <code>docker-compose -f docker-compose-mysql.yml up -d</code>
+    После прогона тестов остановить контейнеры:  
+    <code>docker-compose -f docker-compose-mysql.yml down</code>
 
-5. Запустить тесты  
-   <code>gradlew test</code>
+    Для запуска связки node + postgres выполнить команду:  
+    <code>docker-compose -f docker-compose-postgres.yml up -d</code>
+    После прогона тестов остановить контейнеры:  
+    <code>docker-compose -f docker-compose-postgres.yml down</code>
 
-6. Сформировать и открыть отчеты  
+3. Запустить приложение:  
+
+    Для запуска приложения с базой mysql выполнить команду:  
+    <code>java -Dspring.datasource.url=jdbc:mysql://192.168.99.100:3306/app -jar aqa-shop.jar</code>
+
+    Для запуска приложения с базой postgres выполнить команду:  
+    <code>java -Dspring.datasource.url=jdbc:postgresql://192.168.99.100:5432/app -jar aqa-shop.jar</code>
+
+4. Запустить тесты:  
+
+   Для mysql выполнить команду:  
+   <code>gradlew test -Dtest.db.url=jdbc:mysql://192.168.99.100:3306/app</code>
+
+   Для postgres выполнить команду:  
+   <code>gradlew test -Dtest.db.url=jdbc:postgresql://192.168.99.100:5432/app</code>
+
+5. Сформировать отчеты командой:  
    <code>gradlew allureReport</code>  
+
+6. Открыть отчеты в браузере командой:  
    <code>gradlew allureServe</code>
 
 
