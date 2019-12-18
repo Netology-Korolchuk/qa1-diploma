@@ -15,12 +15,12 @@
 2. Запустить контейнеры docker:  
 
     Для запуска связки node + mysql выполнить команду:  
-    <code>docker-compose -f docker-compose-mysql.yml up -d</code>
+    <code>docker-compose -f docker-compose-mysql.yml up -d</code>  
     После прогона тестов остановить контейнеры:  
     <code>docker-compose -f docker-compose-mysql.yml down</code>
 
     Для запуска связки node + postgres выполнить команду:  
-    <code>docker-compose -f docker-compose-postgres.yml up -d</code>
+    <code>docker-compose -f docker-compose-postgres.yml up -d</code>  
     После прогона тестов остановить контейнеры:  
     <code>docker-compose -f docker-compose-postgres.yml down</code>
 
