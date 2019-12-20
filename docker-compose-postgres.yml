@@ -1,3 +1,5 @@
+version: '3'
+services:
   postgres:
     image: postgres:latest
     ports:
@@ -7,7 +9,7 @@
       - POSTGRES_USER=app
       - POSTGRES_PASSWORD=pass
     volumes:
-      - ./data:/var/lib/postgres
+      - ./dataps:/var/lib/postgres
   node-app:
     build: ./gate-simulator
     image: node-app:1.0

@@ -5,6 +5,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Credit {
-    private String status;
+public class CreditModel {
+    public String status;
 }
