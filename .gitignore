@@ -43,6 +43,6 @@ out/
 
 ### Exclusions ###
 !gradle/wrapper/gradle-wrapper.jar
-aqa-shop.jar
+!aqa-shop.jar
 !**/src/main/**
 !**/src/test/**
