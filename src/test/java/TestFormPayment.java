@@ -1,14 +1,11 @@
-import org.openqa.selenium.Keys;
+package test;
+
 import java.sql.SQLException;
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
+
+import lombok.val;
 import org.junit.jupiter.api.*;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import io.qameta.allure.*;
 import io.qameta.allure.selenide.AllureSelenide;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestFormPayment {
     private FormPage formPage;
@@ -21,6 +18,11 @@ public class TestFormPayment {
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterEach
+    void clearAll() throws SQLException{
+        test.DBUtils.clearAllData();
     }
 
     @AfterAll
@@ -66,7 +68,7 @@ public class TestFormPayment {
         formPage.pushСontinueButton();
         formPage.checkMessageError();
     }
-//
+
     @Test
     @DisplayName("Оплата по карте c невалидным номером карты, обычная покупка")
     void shouldNoPayInvalidCardNumberField() throws SQLException {
@@ -197,20 +199,27 @@ public class TestFormPayment {
         formPage.checkMessageWrongFormat();
     }
 
-//проверка записи в БД
+
     @Test
     @DisplayName("Оплата по активной карте, обычная покупка, валидные данные, проверка записи в БД")
     void shouldPayByApprovedCardStatusInDB() throws SQLException {
-        formPage.buyForYourMoney();
-        formPage.setCardNumber("4444444444444441");
-        formPage.setCardMonth("08");
-        formPage.setCardYear("22");
-        formPage.setCardOwner("Ivan Petrov");
-        formPage.setCardCVV("999");
-        formPage.pushСontinueButton();
-        formPage.checkPaymentStatus(Status.APPROVED);
-}
+        shouldPayByApprovedCard();
+        DBUtils.checkPaymentStatus(Status.APPROVED);
+    }
 
+    @Test
+    @DisplayName("Оплата по неактивной карте, обычная покупка, валидные данные, проверка записи в БД")
+    void shouldNoPayByDeclinedCardStatusInDB() throws SQLException {
+        shouldNoPayByDeclinedCard();
+        DBUtils.checkPaymentStatus(Status.DECLINED);
+    }
+
+    @Test
+    @DisplayName("Оплата по неизвестной карте, обычная покупка, валидные данные, проверка записи в БД")
+    void shouldNoPayByUnknownCardStatusInDB() throws SQLException {
+        shouldNoPayByUnknownCard();
+        DBUtils.checkPaymentStatus(Status.DECLINED);
+    }
 }
 
 

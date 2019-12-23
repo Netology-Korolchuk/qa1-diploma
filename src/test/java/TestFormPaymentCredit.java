@@ -1,15 +1,9 @@
-import org.openqa.selenium.Keys;
+package test;
+
 import java.sql.SQLException;
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
 import org.junit.jupiter.api.*;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import io.qameta.allure.*;
 import io.qameta.allure.selenide.AllureSelenide;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestFormPaymentCredit {
     private FormPage formPage;
@@ -22,6 +16,11 @@ public class TestFormPaymentCredit {
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterEach
+    void clearAll() throws SQLException{
+        test.DBUtils.clearAllData();
     }
 
     @AfterAll
@@ -198,20 +197,26 @@ public class TestFormPaymentCredit {
         formPage.checkMessageWrongFormat();
     }
 
-    //проверка записи в БД
     @Test
     @DisplayName("Оплата по активной карте, покупка в кредит, валидные данные, проверка записи в БД")
     void shouldPayByApprovedCardInCreditStatusInDB() throws SQLException {
-        formPage.buyOnCredit();
-        formPage.setCardNumber("4444444444444441");
-        formPage.setCardMonth("08");
-        formPage.setCardYear("22");
-        formPage.setCardOwner("Ivan Petrov");
-        formPage.setCardCVV("999");
-        formPage.pushСontinueButton();
-        formPage.checkCreditStatus(Status.APPROVED);
+        shouldPayByApprovedCardInCredit();
+        DBUtils.checkCreditStatus(Status.APPROVED);
     }
 
+    @Test
+    @DisplayName("Оплата по неактивной карте, покупка в кредит, валидные данные, проверка записи в БД")
+    void shouldPayByDeclinedCardInCreditStatusInDB() throws SQLException {
+        shouldNoPayByDeclinedCardInCredit();
+        DBUtils.checkCreditStatus(Status.DECLINED);
+    }
+
+    @Test
+    @DisplayName("Оплата по неизвестной карте, покупка в кредит, валидные данные, проверка записи в БД")
+    void shouldPayByUnknownCardInCreditStatusInDB() throws SQLException {
+        shouldNoPayByUnknownCardInCredit();
+        DBUtils.checkCreditStatus(Status.DECLINED);
+    }
 }
 
 

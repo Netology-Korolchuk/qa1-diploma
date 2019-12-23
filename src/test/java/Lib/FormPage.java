@@ -1,12 +1,12 @@
+package test;
+
 import com.codeborne.selenide.SelenideElement;
 import lombok.val;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
-
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -15,15 +15,14 @@ import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FormPage {
 
     private static String url = System.getProperty("db.url");
     private static String appURL = System.getProperty("app.url");
     private static String appPORT = System.getProperty("app.port");
-    private static String userDB = System.getProperty("userDB");
-    private static String password = System.getProperty("password");
+    private static String userDB = System.getProperty("app.userDB");
+    private static String password = System.getProperty("app.password");
 
     List<SelenideElement> input = $$(".input__control");
     SelenideElement cardNumber = input.get(0);
@@ -88,25 +87,7 @@ public class FormPage {
         cvcOrCvvNumber.setValue(cCvv);
     }
 
-
     public void pushСontinueButton(){
         $$(".button__content").find(exactText("Продолжить")).click();
-    }
-
-    public void checkPaymentStatus(Status status) throws SQLException {
-        val runner = new QueryRunner();
-        //val conn = DriverManager.getConnection("jdbc:mysql://192.168.99.100:3306/app", "app", "pass");
-        val conn = DriverManager.getConnection(url, userDB, password);
-        val paymentDataSQL = "SELECT * FROM payment_entity WHERE created >= (now() - interval 5 minute) ORDER BY created DESC;";
-        val payment = runner.query(conn, paymentDataSQL, new BeanHandler<>(PaymentModel.class));
-        assertEquals(status, payment.status);
-    }
-
-    public void checkCreditStatus(Status status) throws SQLException {
-        val runner = new QueryRunner();
-        val conn = DriverManager.getConnection(url, userDB, password);
-        val creditDataSQL = "SELECT * FROM credit_request_entity WHERE created >= (now() - interval 5 minute) ORDER BY created DESC;";
-        val credit = runner.query(conn, creditDataSQL, new BeanHandler<>(CreditModel.class));
-        assertEquals(status, credit.status);
     }
 }
