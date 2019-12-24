@@ -90,4 +90,5 @@ public class FormPage {
     public void pushСontinueButton(){
         $$(".button__content").find(exactText("Продолжить")).click();
     }
+
 }

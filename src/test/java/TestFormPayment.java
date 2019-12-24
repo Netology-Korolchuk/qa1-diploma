@@ -1,11 +1,11 @@
 package test;
 
 import java.sql.SQLException;
-
 import lombok.val;
 import org.junit.jupiter.api.*;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
+import java.util.List;
 
 public class TestFormPayment {
     private FormPage formPage;
@@ -202,23 +202,30 @@ public class TestFormPayment {
 
     @Test
     @DisplayName("Оплата по активной карте, обычная покупка, валидные данные, проверка записи в БД")
-    void shouldPayByApprovedCardStatusInDB() throws SQLException {
-        shouldPayByApprovedCard();
+    void shouldPayByApprovedCardStatusInDB()  throws SQLException{
+        formPage.buyForYourMoney();
+        formPage.setCardNumber("4444444444444441");
+        formPage.setCardMonth("08");
+        formPage.setCardYear("22");
+        formPage.setCardOwner("Ivan Petrov");
+        formPage.setCardCVV("999");
+        formPage.pushСontinueButton();
+        formPage.checkMessageSuccess();
         DBUtils.checkPaymentStatus(Status.APPROVED);
     }
 
     @Test
     @DisplayName("Оплата по неактивной карте, обычная покупка, валидные данные, проверка записи в БД")
     void shouldNoPayByDeclinedCardStatusInDB() throws SQLException {
-        shouldNoPayByDeclinedCard();
-        DBUtils.checkPaymentStatus(Status.DECLINED);
-    }
-
-    @Test
-    @DisplayName("Оплата по неизвестной карте, обычная покупка, валидные данные, проверка записи в БД")
-    void shouldNoPayByUnknownCardStatusInDB() throws SQLException {
-        shouldNoPayByUnknownCard();
-        DBUtils.checkPaymentStatus(Status.DECLINED);
+        formPage.buyForYourMoney();
+        formPage.setCardNumber("4444444444444442");
+        formPage.setCardMonth("08");
+        formPage.setCardYear("22");
+        formPage.setCardOwner("Ivan Petrov");
+        formPage.setCardCVV("999");
+        formPage.pushСontinueButton();
+        formPage.checkMessageSuccess();
+       DBUtils.checkPaymentStatus(Status.DECLINED);
     }
 }
 
